@@ -21,6 +21,7 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
     Button add_button,remove_button;
     RecyclerViewAppAdapter adapter;
 
+
     final int changeCount = 8;
     ArrayList<String> allData = new ArrayList<String>();
     ArrayList<String> changeCacheData = new ArrayList<String>();
