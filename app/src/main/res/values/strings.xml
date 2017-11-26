@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">AppMsg</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+
+
+    <string name="example_txt_src">今天很高興，自己解決了判斷ScrollView滾動停止的監聽,現在分享給大家。
+因為ScrollView沒有像listView中的setOnScrollListener()監聽，當然也就沒有SCROLL_STATE_IDLE等。
+解決的問題：
+公司項目需要在一個列表中，類似listView,因為業務要求，這個列表是用拼湊的方法，拼湊出來的，所以外層包裹一層ScrollView。
+現在公司要求，滑動到最後一條的時候，加載下一部分數據。如果使用scrollView.getScrollY()獲得的是你手滑動的距離，當你松開手之後，界面會繼續滑動，這個方法是獲取不到新的Y值，所以，我們可以添加監聽，時刻監視著ScrollView的變化。
+需要先給ScrollView添加TouchListener ,在MotionEVENT.Up中，發送延遲的handler,這樣就可以起到監聽的作用。並且記錄當前的高度lastY
+在handler中，如果高度lastY和scrollView.getScrollY()是相等的，則表示，ScrollView已經停止，這時再根據你的要求判斷停止之後的業務。這時的scrollView.getScrollY()就是控件滾動的距離。如果不相等，證明孩子啊滑動中，繼續發handler繼續記錄lastY。
+廢話不多說，代碼如下。希望對你有所幫助。今天很高興，自己解決了判斷ScrollView滾動停止的監聽,現在分享給大家。
+因為ScrollView沒有像listView中的setOnScrollListener()監聽，當然也就沒有SCROLL_STATE_IDLE等。
+解決的問題：
+公司項目需要在一個列表中，類似listView,因為業務要求，這個列表是用拼湊的方法，拼湊出來的，所以外層包裹一層ScrollView。
+現在公司要求，滑動到最後一條的時候，加載下一部分數據。如果使用scrollView.getScrollY()獲得的是你手滑動的距離，當你松開手之後，界面會繼續滑動，這個方法是獲取不到新的Y值，所以，我們可以添加監聽，時刻監視著ScrollView的變化。
+需要先給ScrollView添加TouchListener ,在MotionEVENT.Up中，發送延遲的handler,這樣就可以起到監聽的作用。並且記錄當前的高度lastY
+在handler中，如果高度lastY和scrollView.getScrollY()是相等的，則表示，ScrollView已經停止，這時再根據你的要求判斷停止之後的業務。這時的scrollView.getScrollY()就是控件滾動的距離。如果不相等，證明孩子啊滑動中，繼續發handler繼續記錄lastY。
+廢話不多說，代碼如下。希望對你有所幫助。今天很高興，自己解決了判斷ScrollView滾動停止的監聽,現在分享給大家。
+因為ScrollView沒有像listView中的setOnScrollListener()監聽，當然也就沒有SCROLL_STATE_IDLE等。
+解決的問題：
+公司項目需要在一個列表中，類似listView,因為業務要求，這個列表是用拼湊的方法，拼湊出來的，所以外層包裹一層ScrollView。
+現在公司要求，滑動到最後一條的時候，加載下一部分數據。如果使用scrollView.getScrollY()獲得的是你手滑動的距離，當你松開手之後，界面會繼續滑動，這個方法是獲取不到新的Y值，所以，我們可以添加監聽，時刻監視著ScrollView的變化。
+需要先給ScrollView添加TouchListener ,在MotionEVENT.Up中，發送延遲的handler,這樣就可以起到監聽的作用。並且記錄當前的高度lastY
+在handler中，如果高度lastY和scrollView.getScrollY()是相等的，則表示，ScrollView已經停止，這時再根據你的要求判斷停止之後的業務。這時的scrollView.getScrollY()就是控件滾動的距離。如果不相等，證明孩子啊滑動中，繼續發handler繼續記錄lastY。
+廢話不多說，代碼如下。希望對你有所幫助。今天很高興，自己解決了判斷ScrollView滾動停止的監聽,現在分享給大家。
+因為ScrollView沒有像listView中的setOnScrollListener()監聽，當然也就沒有SCROLL_STATE_IDLE等。
+解決的問題：
+公司項目需要在一個列表中，類似listView,因為業務要求，這個列表是用拼湊的方法，拼湊出來的，所以外層包裹一層ScrollView。
+現在公司要求，滑動到最後一條的時候，加載下一部分數據。如果使用scrollView.getScrollY()獲得的是你手滑動的距離，當你松開手之後，界面會繼續滑動，這個方法是獲取不到新的Y值，所以，我們可以添加監聽，時刻監視著ScrollView的變化。
+需要先給ScrollView添加TouchListener ,在MotionEVENT.Up中，發送延遲的handler,這樣就可以起到監聽的作用。並且記錄當前的高度lastY
+在handler中，如果高度lastY和scrollView.getScrollY()是相等的，則表示，ScrollView已經停止，這時再根據你的要求判斷停止之後的業務。這時的scrollView.getScrollY()就是控件滾動的距離。如果不相等，證明孩子啊滑動中，繼續發handler繼續記錄lastY。
+廢話不多說，代碼如下。希望對你有所幫助。</string>
+</resources>

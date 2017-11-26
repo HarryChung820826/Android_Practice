@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/outerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00ff77"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.harry.appmsg.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/eventTextView_Layout"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="200dp">
+
+        <com.example.harry.appmsg.MyView.EventTextView
+            android:id="@+id/eventTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:text="EventTextView"/>
+
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+            <Button
+                android:id="@+id/btn"
+                android:text="Click .. "
+                android:textAllCaps="false"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_intent"
+                android:text="Click .. go to OtherPage"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/btn_viewpager"
+                android:text="Click .. go to ViewPager"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/btn_listview"
+                android:text="Click .. go to ListView"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/btn_gridview"
+                android:text="Click .. go to GrideView"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_recyclerView"
+                android:text="Click .. go to RecyclerView"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_NestedScrollView"
+                android:text="Click .. go to NestedScrollView"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_ScrollTransferView"
+                android:text="Click .. go to ScrollTransferView"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btn_recyclerViewApp"
+                android:text="Click .. go to RecyclerViewApp"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btn_simpleApp"
+                android:text="Click .. go to SimpleActivityApp"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
