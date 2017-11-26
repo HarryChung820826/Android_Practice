@@ -10,6 +10,15 @@
     tools:context="com.example.harry.appmsg.MainActivity">
 
     <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"/>
+
+
+    <LinearLayout
         android:id="@+id/eventTextView_Layout"
         android:layout_width="match_parent"
         android:gravity="center"

@@ -11,6 +11,11 @@ import android.util.Log;
 
 /**
  * Created by Harry on 2017/11/23.
+ * 參考一 ：http://blog.csdn.net/u014731991/article/details/51145074
+ * 底部刷新 ： http://www.bijishequ.com/detail/368337?p=60-17
+ * OnScrollListener 參考 ：http://www.jianshu.com/p/ce347cf991db
+ * 指紋辨識 ： https://github.com/googlesamples/android-FingerprintDialog
+ * RecyclerView 移動項目 參考：http://p.codekk.com/detail/Android/AlphaBoom/ClassifyView
  */
 public class ScrollSpeedLinearLayoutManger extends LinearLayoutManager{
     public ScrollSpeedLinearLayoutManger(Context context) {
@@ -58,6 +63,7 @@ public class ScrollSpeedLinearLayoutManger extends LinearLayoutManager{
         }
 
         protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+//            MILLISECONDS_PER_INCH / displayMetrics.densityDpi
             return 0.3f;
         }
 

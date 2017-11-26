@@ -1,6 +1,8 @@
 package com.example.harry.appmsg;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +20,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener ,
 
     private final String TAG = "MainActivity";
 
-    LinearLayout outerLayout,eventTextView_Layout;
+    LinearLayout outerLayout,topLayout,eventTextView_Layout;
     EventTextView eventTextView;
 
     Button btn,btn_intent,btn_viewpager,btn_listview,btn_gridview,btn_recyclerView
@@ -133,6 +135,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener ,
                 startActivity(intent);
             }
         });
+
     }
 
     private void eventTest(){
@@ -140,6 +143,12 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener ,
         eventTextView_Layout.setOnTouchListener(this);
         eventTextView.setOnClickListener(this);
         eventTextView.setOnTouchListener(this);
+    }
+
+    private void createTopLayout(){
+        topLayout = (LinearLayout)findViewById(R.id.topLayout);
+        GradientDrawable bgShape = (GradientDrawable)topLayout.getBackground();
+        bgShape.setColor(Color.argb(255,0,0,255));
     }
 
     @Override
@@ -162,6 +171,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener ,
 
     @Override
     public void onClick(View view) {
+        createTopLayout();
         Tool.log("showEventLog_"+TAG,"EventTextView_onClick");
     }
 }
