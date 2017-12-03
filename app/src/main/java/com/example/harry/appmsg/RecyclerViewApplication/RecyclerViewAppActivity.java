@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 
 public class RecyclerViewAppActivity extends Activity implements View.OnClickListener{
 
+    LinearLayout outer_layout;
+    int outerHeight = 0 ;
     RecyclerView recyclerViewApp;
     Button add_button,remove_button;
     RecyclerViewAppAdapter adapter;
@@ -31,8 +34,16 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
         setContentView(R.layout.activity_recycler_view_app);
         init();
     }
-
+    int offsetY = 0 ;  //紀錄 滑動的 Y
+    int fetchHeight = 0 ;//紀錄補空白的高度
     private void init(){
+        outer_layout = (LinearLayout) findViewById(R.id.outer_layout);
+        outer_layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                outerHeight = outer_layout.getMeasuredHeight();
+            }
+        });
         add_button = (Button)findViewById(R.id.add_button);
         add_button.setOnClickListener(this);
         remove_button = (Button)findViewById(R.id.remove_button);
@@ -41,12 +52,20 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
         adapter = new RecyclerViewAppAdapter(RecyclerViewAppActivity.this,initData());
 
         recyclerViewApp = (RecyclerView)findViewById(R.id.recyclerViewApp);
-//        RecyclerView.LayoutManager manager = new LinearLayoutManager(RecyclerViewAppActivity.this);
         final ScrollSpeedLinearLayoutManger manager = new ScrollSpeedLinearLayoutManger(RecyclerViewAppActivity.this);
         recyclerViewApp.setLayoutManager(manager);
         recyclerViewApp.setAdapter(adapter);
         recyclerViewApp.addItemDecoration(new RecyclerViewAdapterDecoration(RecyclerViewAppActivity.this,R.color.gray66, LinearLayoutManager.VERTICAL));
 
+
+        recyclerViewApp.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+//                adapter.getRecyclerViewContentHeight();
+                Tool.log("onGlobalLayout","onGlobalLayout  addOnGlobalLayoutListener " );
+                UnExpand();
+            }
+        });
 
         recyclerViewApp.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isIDLE = true;
@@ -60,16 +79,13 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //停止滾動狀態
                     isIDLE = true;
+
                     if(manager.findFirstVisibleItemPosition() == 0 && isIDLE){
                         RecyclerView.ViewHolder viewHolder = adapter.getViewHolder(manager.findFirstVisibleItemPosition());
                         isHalf = checkHalfVisible(((RecyclerViewAppAdapter.MySampleLayoutViewHolder)viewHolder).sample);
                         if(isHalf && !isTop){
                             recyclerViewApp.smoothScrollToPosition(0);
                             Tool.log("onScrollStateChanged","超過一半");
-                        }else{
-//                            Tool.log("onScrollStateChanged","沒有超過一半");
-//                            recyclerViewApp.smoothScrollToPosition(20);
-//                            recyclerViewApp.smoothScrollBy(0,getMustScrollY(((RecyclerViewAppAdapter.MySampleLayoutViewHolder)viewHolder).sample));
                         }
 
                         if(!isHalf && !(recyclerView.getScrollY() == getMustScrollY(((RecyclerViewAppAdapter.MySampleLayoutViewHolder)viewHolder).sample))){
@@ -77,6 +93,7 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
                             recyclerViewApp.smoothScrollBy(0,getMustScrollY(((RecyclerViewAppAdapter.MySampleLayoutViewHolder)viewHolder).sample));
                         }
                     }
+
                 }else{
                     isIDLE = false;
                 }
@@ -85,12 +102,11 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                offsetY += dy;
                 isTop = isScrollToTop();
-//                if(manager.findFirstVisibleItemPosition() == 0 && isIDLE){
-//                    Tool.log("onScrolled"," pos " + manager.findFirstVisibleItemPosition() + "  " +isIDLE);
-//                    RecyclerView.ViewHolder viewHolder = adapter.getViewHolder(manager.findFirstVisibleItemPosition());
-//                    checkHalfVisible(((RecyclerViewAppAdapter.MySampleLayoutViewHolder)viewHolder).sample);
-//                }
+                if(manager.findLastCompletelyVisibleItemPosition() == allData.size() - 1) {
+                    measureProcess();
+                }
             }
             public boolean isScrollToTop(){
                 if(manager.findFirstCompletelyVisibleItemPosition() == 0){
@@ -98,11 +114,6 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
                 }else{
                     return false;
                 }
-//                if(manager.findViewByPosition(0).getTop() == 0 && manager.findFirstVisibleItemPosition() == 0){
-//                    return true;
-//                }else{
-//                    return false;
-//                }
             }
         });
     }
@@ -112,12 +123,14 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
     private ArrayList<String> initData(){
         allData = new ArrayList<String>();
         allData.add(RecyclerViewAppAdapter.SAMPLELAYOUT);
-        for(int i = 0 ; i < 80 ; i ++ ){
+        for(int i = 0 ; i < 5 ; i ++ ){
             if(i> 0 && i < changeCount){
                 changeCacheData.add(""+i);
             }
             allData.add(""+i);
         }
+        allData.add(RecyclerViewAppAdapter.SAMPLELAYOUT);
+        allData.add(RecyclerViewAppAdapter.SAMPLELAYOUT);
         return allData;
     }
 
@@ -126,12 +139,13 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
         switch (view.getId()){
             case R.id.add_button:
                 if(adapter !=null) {
-                    adapter.addItem(changeCacheData);
+//                    adapter.addItem(changeCacheData);
+                    UnExpand();
                 }
                 break;
             case R.id.remove_button:
                 if(adapter !=null){
-                    adapter.removeItem(changeCount);
+//                    adapter.removeItem(changeCount);
                 }
                 break;
         }
@@ -167,4 +181,46 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
         sampleLayout.getLocalVisibleRect(localRect);
         return (sampleLayout.getHeight()-localRect.top);
     }
+
+    private void UnExpand(){
+        RecyclerView.ViewHolder viewHolder = adapter.getViewHolder(0);
+        recyclerViewApp.smoothScrollBy(0,getMustScrollY(((RecyclerViewAppAdapter.MySampleLayoutViewHolder)viewHolder).sample));
+    }
+
+    /**
+     * *利用 onScroll 的 dy 累計 滑動的Y軸 距離  offsetY
+     *
+     *<判斷至底能不能滾動上去>
+     *判斷滾動到底 offsetY < adapter.getViewHolder(0).view.getMeasuredHeight()
+     *補最後一項 parames 高度 （adapter.getViewHolder(0).view.getMeasuredHeight() - offsetY）
+     *
+     *<onGlobalLayout 執行 RecyclerView 內容有變動時>
+     *RecyclerView.onGlobalLayout -> 也要判斷
+     *(內容高度 - fetchHeight) 小於 (adapter.getViewHolder(0).view.getMeasuredHeight() + outerLayoutHeight)
+     *--> 重新計算fetchHeight 的高度
+     *
+     * */
+    public void measureProcess(){
+
+        int overAddContentHeight =  outerHeight+offsetY;
+        Tool.log("onGlobalLayout"," onScroll FirstItemHeight " + adapter.getViewHolder(0).itemView.getMeasuredHeight());
+        Tool.log("onGlobalLayout"," onScroll outerHeight " + outerHeight);
+        Tool.log("onGlobalLayout"," onScroll offsetY " + offsetY);
+//        Tool.log("onGlobalLayout"," onScroll offset " + recyclerViewApp.computeVerticalScrollOffset());
+//        Tool.log("onGlobalLayout"," onScroll Range " + recyclerViewApp.computeVerticalScrollRange());
+        Tool.log("onGlobalLayout"," onScroll Range " + overAddContentHeight);
+//        Tool.log("onGlobalLayout", "overHeight" + (recyclerViewApp.computeVerticalScrollRange() - outerHeight) );
+
+//        if ((overAddContentHeight - outerHeight) < adapter.getViewHolder(0).itemView.getMeasuredHeight()) {
+//            int differenceDistance = adapter.getViewHolder(0).itemView.getMeasuredHeight() - (overAddContentHeight - outerHeight);
+//            Tool.log("onGlobalLayout", "fetchHeight " + differenceDistance);
+//            adapter.changeBottomLinearLayoutHeight(differenceDistance+10);
+//        }
+        if(offsetY < adapter.getViewHolder(0).itemView.getMeasuredHeight()){
+            fetchHeight = (adapter.getViewHolder(0).itemView.getMeasuredHeight() - offsetY)+5;
+            adapter.changeBottomLinearLayoutHeight(fetchHeight);
+        }
+
+    }
+
 }

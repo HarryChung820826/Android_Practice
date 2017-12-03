@@ -4,7 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.harry.appmsg.R;
 
 /**
  * Created by Harry on 2017/11/26.
@@ -49,6 +54,22 @@ public class MyViewTool {
         }
     }
 
+    public View getRecyclerView(Context context, ViewGroup root, boolean attachToRoot){
+        LayoutInflater inflater = LayoutInflater.from(context);
+        return inflater.inflate(R.layout.viewtool_recycler_view,root,attachToRoot);
+    }
 
+    public static float convertDpToPixel(Context context , float dp ){
+        return dp * getDensity(context);
+    }
+
+    public static float convertPixelToDp(Context context , float px){
+        return px / getDensity(context);
+    }
+
+    private static float getDensity(Context context){
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return metrics.density;
+    }
 
 }

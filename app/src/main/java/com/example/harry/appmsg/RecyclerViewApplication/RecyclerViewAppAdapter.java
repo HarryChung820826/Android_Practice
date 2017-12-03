@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.harry.appmsg.R;
+import com.example.harry.appmsg.Tool;
+import com.example.harry.appmsg.ViewTool.MyViewTool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ import java.util.HashMap;
  * Created by Harry on 2017/10/21.
  */
 public class RecyclerViewAppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    ArrayList<String> allData = new ArrayList<String>();
+    private static ArrayList<String> allData = new ArrayList<String>();
     Context mContext;
     LayoutInflater inflater;
 
@@ -30,6 +32,7 @@ public class RecyclerViewAppAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public RecyclerViewAppAdapter(Context mContext,ArrayList<String> allData) {
         super();
         this.mContext = mContext;
+        this.allData.clear();
         this.allData.addAll(allData);
         inflater = LayoutInflater.from(mContext);
     }
@@ -40,9 +43,8 @@ public class RecyclerViewAppAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             return new MyViewHolder(inflater.inflate(R.layout.recyclerview_app_item_one, parent, false));
         }else if(viewType == VIEWTYPE_TWO){
             return new MyViewHolder(inflater.inflate(R.layout.recyclerview_app_item_two, parent, false));
-        }else{
-//            VIEWTYPE_SAMPLELAYOUT
-            return new MySampleLayoutViewHolder(inflater.inflate(R.layout.layout_sample, parent, false));
+        }else /*if(viewType == VIEWTYPE_SAMPLELAYOUT)*/{
+            return new MySampleLayoutViewHolder(mContext,inflater.inflate(R.layout.layout_sample, parent, false));
         }
     }
 
@@ -51,6 +53,10 @@ public class RecyclerViewAppAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         viewHolderHashMap.put(position,holder);
         if(holder instanceof MyViewHolder) {
             ((MyViewHolder)holder).tx_item.setText(allData.get(position));
+        }
+
+        if(holder instanceof MySampleLayoutViewHolder){
+            ((MySampleLayoutViewHolder)holder).onBindViewHolder(position);
         }
     }
 
@@ -78,10 +84,31 @@ public class RecyclerViewAppAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public static class MySampleLayoutViewHolder extends RecyclerView.ViewHolder{
+        Context context;
         LinearLayout sample;
-        public MySampleLayoutViewHolder(View itemView) {
+        public MySampleLayoutViewHolder(Context context ,View itemView) {
             super(itemView);
+            this.context = context;
             sample = (LinearLayout)itemView.findViewById(R.id.sample_layout);
+        }
+
+        public void onBindViewHolder(int position){
+            if(position > 0  && position < allData.size() -1 ) {
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) sample.getLayoutParams();
+                params.height = (int)MyViewTool.convertDpToPixel(this.context,100);
+                if((position%2 == 0)) {
+                    sample.setBackgroundColor(this.context.getResources().getColor(R.color.blue88));
+                }else{
+                    sample.setBackgroundColor(this.context.getResources().getColor(R.color.green2299));
+                }
+                sample.setLayoutParams(params);
+            }
+            if(position == allData.size() -1){
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) sample.getLayoutParams();
+                params.height = (int)MyViewTool.convertDpToPixel(this.context,1);
+                sample.setLayoutParams(params);
+
+            }
         }
     }
 
@@ -110,6 +137,45 @@ public class RecyclerViewAppAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         notifyItemRangeRemoved(1,remove_size);
     }
 
+    public void changeBottomLinearLayoutHeight(int height){
+        RecyclerView.ViewHolder holder = viewHolderHashMap.get(allData.size()-1);
+        holder.itemView.getMeasuredHeight();
+        if(holder != null){
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) ((MySampleLayoutViewHolder)holder).sample.getLayoutParams();
+//            params.height = (int)MyViewTool.convertDpToPixel(mContext,height);
+            params.height = height;
+            ((MySampleLayoutViewHolder)holder).sample.setLayoutParams(params);
+        }else{
+            Tool.log("onGlobalLayout","changeBottomLinearLayoutHeight holder is null");
+        }
 
+//        allData.add(allData.size() -1 , RecyclerViewAppAdapter.SAMPLELAYOUT);
+//        notifyDataSetChanged();
+    }
+    int height_item_one = 0 ;
+    int height_item_two = 0 ;
+    int height_item_layout = 0 ;
+    public int getRecyclerViewContentHeight(){
+        int allHeight = 0 ;
+        for(int i = 0 ; i < allData.size() ; i ++){
+            RecyclerView.ViewHolder holder = viewHolderHashMap.get(allData.size()-1);
+            if(holder!=null) {
+                if (getItemViewType(i) == VIEWTYPE_ONE) {
+                    height_item_one = holder.itemView.getMeasuredHeight();
+                    allHeight += height_item_one;
+                }
+                if (getItemViewType(i) == VIEWTYPE_TWO) {
+                    height_item_two = holder.itemView.getMeasuredHeight();
+                    allHeight += height_item_two;
+                }
+                if (holder instanceof MySampleLayoutViewHolder) {
+                    height_item_layout = holder.itemView.getMeasuredHeight();
+                    allHeight += height_item_layout;
+                }
+            }
+        }
+        Tool.log("onGlobalLayout","onGlobalLayout height_item_layout " + height_item_layout + " allHeight "+allHeight);
+        return  allHeight;
+    }
 
 }
