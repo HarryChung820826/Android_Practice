@@ -3,6 +3,7 @@ package com.example.harry.appmsg.RecyclerViewApplication;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -184,7 +185,19 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
 
     private void UnExpand(){
         RecyclerView.ViewHolder viewHolder = adapter.getViewHolder(0);
-        recyclerViewApp.smoothScrollBy(0,getMustScrollY(((RecyclerViewAppAdapter.MySampleLayoutViewHolder)viewHolder).sample));
+        Tool.log("onGlobalLayout", "UnExpand " + getMustScrollY(((RecyclerViewAppAdapter.MySampleLayoutViewHolder) viewHolder).sample) + "");
+//        recyclerViewApp.smoothScrollBy(0, getMustScrollY(((RecyclerViewAppAdapter.MySampleLayoutViewHolder) viewHolder).sample));
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                /**
+                 * 滾動到定位 要等GlobalLayoutListener View畫完 約略抓50ms 後 執行 滾動定位
+                 * */
+                recyclerViewApp.smoothScrollBy(0,600);
+            }
+        },50);
+
     }
 
     /**
@@ -200,6 +213,7 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
      *--> 重新計算fetchHeight 的高度
      *
      * */
+    boolean isFetchCheck = false;
     public void measureProcess(){
 
         int overAddContentHeight =  outerHeight+offsetY;
@@ -219,6 +233,7 @@ public class RecyclerViewAppActivity extends Activity implements View.OnClickLis
         if(offsetY < adapter.getViewHolder(0).itemView.getMeasuredHeight()){
             fetchHeight = (adapter.getViewHolder(0).itemView.getMeasuredHeight() - offsetY)+5;
             adapter.changeBottomLinearLayoutHeight(fetchHeight);
+            isFetchCheck = true;
         }
 
     }
